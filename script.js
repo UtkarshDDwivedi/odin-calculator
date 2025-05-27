@@ -17,9 +17,17 @@ function evaluate() {
     operand1 = parseInt(operand1);
     operand2 = parseInt(operand2);
     if (operator == "%") {
-        result = operand1 % operand2;
+        if (operand2 == 0) {
+            displayToScreen(screen, "Zero?");
+        } else {
+            result = operand1 % operand2;
+        }
     } else if (operator == "/") {
-        result = operand1 / operand2;
+        if (operand2 == 0) {
+            displayToScreen(screen, "Zero?");
+        } else {
+            result = operand1 / operand2;
+        }
     } else if (operator == "*") {
         result = operand1 * operand2;
     } else if (operator == "-") {
@@ -160,6 +168,8 @@ let equalsTo = document.querySelector(".result");
 equalsTo.addEventListener("click", (e) => {
     e.stopPropagation();
     evaluate();
-    displayToScreen(screen, result);
-    justEvaluated = true;
+    if (result != null) {
+        displayToScreen(screen, result);
+        justEvaluated = true;
+    }
 })
