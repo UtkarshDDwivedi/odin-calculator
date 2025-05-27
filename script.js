@@ -8,10 +8,15 @@ let operand2DecimalInUse = false;
 let screen = document.querySelector(".display");
 
 function displayToScreen(screen, content) {
-    if (content[0] == "+" && content.length > 1) {
-        screen.textContent = content.substring(1);
-    } else {
+    if (content == "+" || content == "-" || content == "/" || content == "*" || content == "%" || content == ".") {
         screen.textContent = content;
+    } else {
+        content = parseFloat(content);
+        if (Number.isInteger(content)) {
+            screen.textContent = content;
+        } else {
+            screen.textContent = content.toFixed(2);
+        }
     }
 }
 
@@ -165,7 +170,7 @@ functions.forEach(func => {
             displayToScreen(screen, result);
             operand1 = (result >= 0 ? "+" : "") + result.toString();
             assignOperator(func);
-            operand2 = "";
+            operand2 = "+";
         }
     })
 })
@@ -185,11 +190,15 @@ backspace.addEventListener("click", (e) => {
     e.stopPropagation();
 
     if (operator === null) {
-        operand1 = operand1.substring(0, operand1.length - 1);
-        displayToScreen(screen, operand1);
+        if (operand1 != "+0" && operand1 != "+" && operand1 != "-") {
+            operand1 = operand1.substring(0, operand1.length - 1);
+            displayToScreen(screen, operand1);
+        }
     } else {
-        operand2 = operand2.substring(0, operand2.length - 1);
-        displayToScreen(screen, operand2);
+        if (operand2 != "+0" && operand2 != "+" && operand2 != "-") {
+            operand2 = operand2.substring(0, operand2.length - 1);
+            displayToScreen(screen, operand2);
+        }
     }
 })
 
@@ -203,5 +212,119 @@ periodKey.addEventListener("click", (e) => {
         operand2 += ".";
         displayToScreen(screen, operand2);
         operand2DecimalInUse = true;
+    }
+})
+
+document.addEventListener("keydown", (e) => {
+    e.stopPropagation();
+
+    if (!isNaN(e.key) && e.key !== ' ') {
+        if (!justEvaluated) {
+            if (operator === null) {
+                operand1 += e.key;
+                displayToScreen(screen, operand1);
+            } else {
+                operand2 += e.key;
+                displayToScreen(screen, operand2);
+            }
+        } else {
+            operand1 = "+";
+            operand2 = "+";
+            operator = null;
+            result = null;
+            justEvaluated = false;
+            operand1DecimalInUse = false;
+            operand2DecimalInUse = false;
+            if (operator === null) {
+                operand1 += e.key;
+                displayToScreen(screen, operand1);
+            } else {
+                operand2 += e.key;
+                displayToScreen(screen, operand2);
+            }
+        }
+    } else if (e.key == "+") {
+        if (operator === null) {
+            operator = "+";
+            displayToScreen(screen, operator);
+        } else {
+            evaluate();
+            displayToScreen(screen, result);
+            operand1 = (result >= 0 ? "+" : "") + result.toString();
+            operator = "+";
+            operand2 = "+";
+        }
+    } else if (e.key == "-") {
+        if (operator === null) {
+            operator = "-";
+            displayToScreen(screen, operator);
+        } else {
+            evaluate();
+            displayToScreen(screen, result);
+            operand1 = (result >= 0 ? "+" : "") + result.toString();
+            operator = "-";
+            operand2 = "+";
+        }
+    } else if (e.key == "/") {
+        if (operator === null) {
+            operator = "/";
+            displayToScreen(screen, operator);
+        } else {
+            evaluate();
+            displayToScreen(screen, result);
+            operand1 = (result >= 0 ? "+" : "") + result.toString();
+            operator = "/";
+            operand2 = "+";
+        }
+    } else if (e.key == "*") {
+        if (operator === null) {
+            operator = "*";
+            displayToScreen(screen, operator);
+        } else {
+            evaluate();
+            displayToScreen(screen, result);
+            operand1 = (result >= 0 ? "+" : "") + result.toString();
+            operator = "*";
+            operand2 = "+";
+        }
+    } else if (e.key == "%") {
+        if (operator === null) {
+            operator = "%";
+            displayToScreen(screen, operator);
+        } else {
+            evaluate();
+            displayToScreen(screen, result);
+            operand1 = (result >= 0 ? "+" : "") + result.toString();
+            operator = "%";
+            operand2 = "+";
+        }
+    } else if (e.key == "Backspace") {
+        if (operator === null) {
+            if (operand1 != "+0" && operand1 != "+" && operand1 != "-") {
+                operand1 = operand1.substring(0, operand1.length - 1);
+                displayToScreen(screen, operand1);
+            }
+        } else {
+            if (operand2 != "+0" && operand2 != "+" && operand2 != "-") {
+                operand2 = operand2.substring(0, operand2.length - 1);
+                displayToScreen(screen, operand2);
+            }
+        }
+    } else if (e.key == "Enter") {
+        evaluate();
+        if (result != null) {
+            displayToScreen(screen, result);
+            justEvaluated = true;
+        }
+    } else if (e.key == ".") {
+        if (operator === null && !operand1DecimalInUse) {
+            operand1 += ".";
+            displayToScreen(screen, operand1);
+            operand1DecimalInUse = true;
+        } else if (operator !== null && !operand2DecimalInUse) {
+            operand2 += ".";
+            displayToScreen(screen, operand2);
+            operand2DecimalInUse = true;
+        }
     }
 })
