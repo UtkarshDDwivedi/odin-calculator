@@ -3,6 +3,8 @@ let operand2 = "+";
 let operator = null;
 let result = null;
 let justEvaluated = false;
+let operand1DecimalInUse = false;
+let operand2DecimalInUse = false;
 let screen = document.querySelector(".display");
 
 function displayToScreen(screen, content) {
@@ -14,8 +16,8 @@ function displayToScreen(screen, content) {
 }
 
 function evaluate() {
-    operand1 = parseInt(operand1);
-    operand2 = parseInt(operand2);
+    operand1 = parseFloat(operand1);
+    operand2 = parseFloat(operand2);
     if (operator == "%") {
         if (operand2 == 0) {
             displayToScreen(screen, "Zero?");
@@ -53,52 +55,52 @@ function assignOperator(func) {
 
 function assignOperand(number) {
     if (operator === null) {
-            if (number.classList.contains("one")) {
-                operand1 += "1";
-            } else if (number.classList.contains("two")) {
-                operand1 += "2";
-            } else if (number.classList.contains("three")) {
-                operand1 += "3";
-            } else if (number.classList.contains("four")) {
-                operand1 += "4";
-            } else if (number.classList.contains("five")) {
-                operand1 += "5";
-            } else if (number.classList.contains("six")) {
-                operand1 += "6";
-            } else if (number.classList.contains("seven")) {
-                operand1 += "7";
-            } else if (number.classList.contains("eight")) {
-                operand1 += "8";
-            } else if (number.classList.contains("nine")) {
-                operand1 += "9";
-            } else if (number.classList.contains("zero")) {
-                operand1 += "0";
-            }
-            displayToScreen(screen, operand1);
-        } else {
-            if (number.classList.contains("one")) {
-                operand2 += "1";
-            } else if (number.classList.contains("two")) {
-                operand2 += "2";
-            } else if (number.classList.contains("three")) {
-                operand2 += "3";
-            } else if (number.classList.contains("four")) {
-                operand2 += "4";
-            } else if (number.classList.contains("five")) {
-                operand2 += "5";
-            } else if (number.classList.contains("six")) {
-                operand2 += "6";
-            } else if (number.classList.contains("seven")) {
-                operand2 += "7";
-            } else if (number.classList.contains("eight")) {
-                operand2 += "8";
-            } else if (number.classList.contains("nine")) {
-                operand2 += "9";
-            } else if (number.classList.contains("zero")) {
-                operand2 += "0";
-            }
-            displayToScreen(screen, operand2);
+        if (number.classList.contains("one")) {
+            operand1 += "1";
+        } else if (number.classList.contains("two")) {
+            operand1 += "2";
+        } else if (number.classList.contains("three")) {
+            operand1 += "3";
+        } else if (number.classList.contains("four")) {
+            operand1 += "4";
+        } else if (number.classList.contains("five")) {
+            operand1 += "5";
+        } else if (number.classList.contains("six")) {
+            operand1 += "6";
+        } else if (number.classList.contains("seven")) {
+            operand1 += "7";
+        } else if (number.classList.contains("eight")) {
+            operand1 += "8";
+        } else if (number.classList.contains("nine")) {
+            operand1 += "9";
+        } else if (number.classList.contains("zero")) {
+            operand1 += "0";
         }
+        displayToScreen(screen, operand1);
+    } else {
+        if (number.classList.contains("one")) {
+            operand2 += "1";
+        } else if (number.classList.contains("two")) {
+            operand2 += "2";
+        } else if (number.classList.contains("three")) {
+            operand2 += "3";
+        } else if (number.classList.contains("four")) {
+            operand2 += "4";
+        } else if (number.classList.contains("five")) {
+            operand2 += "5";
+        } else if (number.classList.contains("six")) {
+            operand2 += "6";
+        } else if (number.classList.contains("seven")) {
+            operand2 += "7";
+        } else if (number.classList.contains("eight")) {
+            operand2 += "8";
+        } else if (number.classList.contains("nine")) {
+            operand2 += "9";
+        } else if (number.classList.contains("zero")) {
+            operand2 += "0";
+        }
+        displayToScreen(screen, operand2);
+    }
 }
 
 numbers = document.querySelectorAll(".number");
@@ -113,6 +115,8 @@ numbers.forEach(number => {
             operator = null;
             result = null;
             justEvaluated = false;
+            operand1DecimalInUse = false;
+            operand2DecimalInUse = false;
             assignOperand(number);
         }
     })
@@ -145,13 +149,15 @@ ac.addEventListener("click", (e) => {
     operand2 = "+";
     operator = null;
     result = null;
+    operand1DecimalInUse = false;
+    operand2DecimalInUse = false;
     displayToScreen(screen, "0")
 })
 
 let functions = document.querySelectorAll(".function");
 functions.forEach(func => {
     func.addEventListener("click", (e) => {
-        if(operator === null) {
+        if (operator === null) {
             assignOperator(func);
             displayToScreen(screen, operator);
         } else {
@@ -184,5 +190,18 @@ backspace.addEventListener("click", (e) => {
     } else {
         operand2 = operand2.substring(0, operand2.length - 1);
         displayToScreen(screen, operand2);
+    }
+})
+
+let periodKey = document.querySelector(".decimal");
+periodKey.addEventListener("click", (e) => {
+    if (operator === null && !operand1DecimalInUse) {
+        operand1 += ".";
+        displayToScreen(screen, operand1);
+        operand1DecimalInUse = true;
+    } else if (operator !== null && !operand2DecimalInUse) {
+        operand2 += ".";
+        displayToScreen(screen, operand2);
+        operand2DecimalInUse = true;
     }
 })
