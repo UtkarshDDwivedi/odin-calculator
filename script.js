@@ -83,3 +83,12 @@ negativeToggle.addEventListener("click", () => {
         displayToScreen(screen, operand2);
     }
 })
+
+let ac = document.querySelector(".ac");
+ac.addEventListener("click", () => {
+    operand1 = "+";
+    operand2 = "+";
+    operator = null;
+    result = null;
+    displayToScreen(screen, "0")
+})
