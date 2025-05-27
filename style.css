@@ -6,11 +6,11 @@
 
 body {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     background: #264653;
+    gap: 50px;
 }
 
 .container {
@@ -59,4 +59,19 @@ body {
 .result {
     flex-grow: 2;
     background: #2a9d8f;
+}
+
+.backspace {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 40px;
+    color: #e9c46a;
+}
+
+.back{
+    width: 200px;
+    height: 75px;
+    color: black;
+    background: #e76f51;
 }

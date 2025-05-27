@@ -173,3 +173,16 @@ equalsTo.addEventListener("click", (e) => {
         justEvaluated = true;
     }
 })
+
+let backspace = document.querySelector(".back");
+backspace.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    if (operator === null) {
+        operand1 = operand1.substring(0, operand1.length - 1);
+        displayToScreen(screen, operand1);
+    } else {
+        operand2 = operand2.substring(0, operand2.length - 1);
+        displayToScreen(screen, operand2);
+    }
+})
