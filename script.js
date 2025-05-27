@@ -2,6 +2,7 @@ let operand1 = "+";
 let operand2 = "+";
 let operator = null;
 let result = null;
+let justEvaluated = false;
 let screen = document.querySelector(".display");
 
 function displayToScreen(screen, content) {
@@ -12,10 +13,38 @@ function displayToScreen(screen, content) {
     }
 }
 
-numbers = document.querySelectorAll(".number");
-numbers.forEach(number => {
-    number.addEventListener("click", () => {
-        if (operator === null) {
+function evaluate() {
+    operand1 = parseInt(operand1);
+    operand2 = parseInt(operand2);
+    if (operator == "%") {
+        result = operand1 % operand2;
+    } else if (operator == "/") {
+        result = operand1 / operand2;
+    } else if (operator == "*") {
+        result = operand1 * operand2;
+    } else if (operator == "-") {
+        result = operand1 - operand2;
+    } else if (operator == "+") {
+        result = operand1 + operand2;
+    }
+}
+
+function assignOperator(func) {
+    if (func.classList.contains("modulo")) {
+        operator = "%";
+    } else if (func.classList.contains("divide")) {
+        operator = "/";
+    } else if (func.classList.contains("multiply")) {
+        operator = "*";
+    } else if (func.classList.contains("subtract")) {
+        operator = "-";
+    } else if (func.classList.contains("add")) {
+        operator = "+";
+    }
+}
+
+function assignOperand(number) {
+    if (operator === null) {
             if (number.classList.contains("one")) {
                 operand1 += "1";
             } else if (number.classList.contains("two")) {
@@ -58,15 +87,32 @@ numbers.forEach(number => {
             } else if (number.classList.contains("nine")) {
                 operand2 += "9";
             } else if (number.classList.contains("zero")) {
-                operand2  += "0";
+                operand2 += "0";
             }
             displayToScreen(screen, operand2);
+        }
+}
+
+numbers = document.querySelectorAll(".number");
+numbers.forEach(number => {
+    number.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (!justEvaluated) {
+            assignOperand(number);
+        } else {
+            operand1 = "+";
+            operand2 = "+";
+            operator = null;
+            result = null;
+            justEvaluated = false;
+            assignOperand(number);
         }
     })
 });
 
 let negativeToggle = document.querySelector(".negativeToggle");
-negativeToggle.addEventListener("click", () => {
+negativeToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
     if (operator === null) {
         if (operand1[0] == "+") {
             operand1 = "-" + operand1.substring(1)
@@ -85,10 +131,35 @@ negativeToggle.addEventListener("click", () => {
 })
 
 let ac = document.querySelector(".ac");
-ac.addEventListener("click", () => {
+ac.addEventListener("click", (e) => {
+    e.stopPropagation();
     operand1 = "+";
     operand2 = "+";
     operator = null;
     result = null;
     displayToScreen(screen, "0")
+})
+
+let functions = document.querySelectorAll(".function");
+functions.forEach(func => {
+    func.addEventListener("click", (e) => {
+        if(operator === null) {
+            assignOperator(func);
+            displayToScreen(screen, operator);
+        } else {
+            evaluate();
+            displayToScreen(screen, result);
+            operand1 = (result >= 0 ? "+" : "") + result.toString();
+            assignOperator(func);
+            operand2 = "";
+        }
+    })
+})
+
+let equalsTo = document.querySelector(".result");
+equalsTo.addEventListener("click", (e) => {
+    e.stopPropagation();
+    evaluate();
+    displayToScreen(screen, result);
+    justEvaluated = true;
 })

@@ -50,9 +50,12 @@ body {
     margin-right: 10px;
 }
 
-.function {
+.function,
+.negativeToggle,
+.ac {
     background: #e76f51;
 }
+
 .result {
     flex-grow: 2;
     background: #2a9d8f;
