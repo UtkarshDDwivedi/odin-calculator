@@ -64,3 +64,22 @@ numbers.forEach(number => {
         }
     })
 });
+
+let negativeToggle = document.querySelector(".negativeToggle");
+negativeToggle.addEventListener("click", () => {
+    if (operator === null) {
+        if (operand1[0] == "+") {
+            operand1 = "-" + operand1.substring(1)
+        } else {
+            operand1 = "+" + operand1.substring(1)
+        }
+        displayToScreen(screen, operand1);
+    } else {
+        if (operand2[0] == "+") {
+            operand2 = "-" + operand2.substring(1)
+        } else {
+            operand2 = "+" + operand2.substring(1)
+        }
+        displayToScreen(screen, operand2);
+    }
+})
