@@ -166,11 +166,16 @@ functions.forEach(func => {
             assignOperator(func);
             displayToScreen(screen, operator);
         } else {
-            evaluate();
-            displayToScreen(screen, result);
-            operand1 = (result >= 0 ? "+" : "") + result.toString();
-            assignOperator(func);
-            operand2 = "+";
+            if (operand2.length > 1) {
+                evaluate();
+                displayToScreen(screen, result);
+                operand1 = (result >= 0 ? "+" : "") + result.toString();
+                assignOperator(func);
+                operand2 = "+";
+            } else {
+                assignOperator(func);
+                displayToScreen(screen, operator);
+            }
         }
     })
 })
